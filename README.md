@@ -56,7 +56,7 @@ dans le ficher de config service.yml
   docker-compose up 
   symfony console doctrine:migrations:migrate
 ```
-## Demmarer app
+## Demarrer app
 
 ```bash
   symfony server:start 
