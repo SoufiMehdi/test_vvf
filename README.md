@@ -35,6 +35,18 @@ Vous devez utiliser le framework symfony.
       POSTGRES_USER: main
       POSTGRES_DB: main`
 
+## Environment Variables Mail
+
+`MAILER_DSN=smtp://127.0.0.1:1025`
+
+## Configuration de l'adresse mail destinataire
+
+dans le ficher de config service.yml
+
+`demande_email: 'traitement.demande@vvf.fr'`
+
+
+
 
 ## Installation
 
@@ -50,9 +62,4 @@ Vous devez utiliser le framework symfony.
   symfony server:start 
   npm run watch
 ```
-## Test
-
-
-## Creer user admin
-
     
