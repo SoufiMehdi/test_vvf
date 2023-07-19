@@ -94,7 +94,7 @@ class AskeService
     public function sendMailAske(Asked $aske, Applicant $applicant): bool
     {
         try{
-            /**/$mailDestination = $this->getEmailDestination();
+            $mailDestination = $this->getEmailDestination();
             $email = new Email();
             $email->from($applicant->getApEmail());
             $email->to($mailDestination);
