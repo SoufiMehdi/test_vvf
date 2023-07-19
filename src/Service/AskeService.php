@@ -3,6 +3,9 @@
 namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use App\Entity\Asked;
 use App\Entity\Applicant;
 use App\Repository\AskedRepository;
@@ -12,26 +15,24 @@ use App\Repository\ApplicantRepository;
  * @property AskedRepository askedRepo
  * @property ApplicantRepository applicantRepo
  * @property EntityManagerInterface manager
+ * @property ContainerBagInterface containerBag
+ * @property MailerInterface mailer
 */
 class AskeService
 {
     public function __construct(
                                     AskedRepository $askedRepo,
                                     ApplicantRepository $applicantRepo,
-                                    EntityManagerInterface $manager
+                                    EntityManagerInterface $manager,
+                                    ContainerBagInterface $containerBag,
+                                    MailerInterface $mailer
                                 )
     {
         $this->askedRepo        = $askedRepo;
         $this->applicantRepo    = $applicantRepo;
         $this->manager          = $manager;
-    }
-
-    public function getAllAske(){
-        return $this->askedRepo->findAll();
-    }
-
-    public function getAllApplicants(){
-        return $this->applicantRepo->findAll();
+        $this->containerBag     = $containerBag;
+        $this->mailer           = $mailer;
     }
     
     /**
@@ -50,16 +51,14 @@ class AskeService
                 $applicant->setApNomberAske($nbrAsked);
                 $this->manager->persist($applicant);
             }
-                
-            $asked->setAskCreatedAt(new \Datetime());
-            $asked->setAskSended(false);
-            $asked->setAskSendedAt(new \Datetime());
             $asked->setAskApplicant($applicant);
+            $asked->setAskCreatedAt(new \Datetime());
+            $result = $this->sendMailAske($asked, $applicant);          
             $this->manager->persist($asked);
             $this->manager->flush();   
 
         }catch(\Exception $e){
-            dump($e->getMessage());
+            //dump($e->getMessage());
             return false;
         }
         return true;
@@ -80,9 +79,42 @@ class AskeService
             $this->manager->persist($applicant);
             $this->manager->flush();
         }catch(\Exception $e){
-            dump($e->getMessage());
+            //dump($e->getMessage());
             return null;
         }
         return $applicant;
+    }
+
+    /**
+     * Function qui envoie le mail de demande
+     * @param Asked $aske
+     * @param Applicant $applicant
+     * @return bool
+    */
+    public function sendMailAske(Asked $aske, Applicant $applicant): bool
+    {
+        try{
+            /**/$mailDestination = $this->getEmailDestination();
+            $email = new Email();
+            $email->from($applicant->getApEmail());
+            $email->to($mailDestination);
+            $email->subject($aske->getAskSubject());
+            $email->text($aske->getAskDescription());
+            $this->mailer->send($email);
+            $aske->setAskSended(true);
+            $aske->setAskSendedAt(new \Datetime());
+        }catch(\Exception $e){
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Function qui recupere l'@ de destination
+     * @return string
+    */
+    private function getEmailDestination(): string
+    {
+        return $this->containerBag->get('demande_email');
     }
 }

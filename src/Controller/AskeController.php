@@ -26,9 +26,6 @@ class AskeController extends AbstractController
             else
                 $error = true;    
         }
-        $askes = $askeService->getAllAske();
-        $applicants = $askeService->getAllApplicants();
-        dump($askes, $applicants);
         return $this->render('aske/index.html.twig', [
             'form' => $form,
             'error' => $error
