@@ -15,18 +15,29 @@ class AskeController extends AbstractController
     #[Route('/', name: 'app_aske')]
     public function index(Request $request, AskeService $askeService): Response
     {
+        $error = false;
         $aske = new Asked();
         $form = $this->createForm(AskedType::class, $aske);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $retourCreatedAske = $askeService->createAsked($aske);
-            dump($retourCreatedAske);
+            if($retourCreatedAske)
+                return $this->redirectToRoute('succes_aske_create');
+            else
+                $error = true;    
         }
         $askes = $askeService->getAllAske();
         $applicants = $askeService->getAllApplicants();
         dump($askes, $applicants);
         return $this->render('aske/index.html.twig', [
-            'form' => $form
+            'form' => $form,
+            'error' => $error
         ]);
+    }
+
+    #[Route('/succes-aske-create', name:"succes_aske_create")]
+    public function succesAskeCreate(): Response
+    {
+        return $this->render('aske/success_aske_create.html.twig');
     }
 }

@@ -3,17 +3,24 @@
 {% block title %}Faire une demande{% endblock %}
 
 {% block body %}
-    <h3>Faire une demande</h3>
-    {{ form_start(form) }}
-    <div class="row">
-        <div class="col-md-6">
-            {{ form_row(form.askSubject) }}
+    {% if not error %}
+        <h3>Faire une demande</h3>
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.askSubject) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.askEmailApplicant) }}
+            </div>
         </div>
-        <div class="col-md-6">
-            {{ form_row(form.askEmailApplicant) }}
+        {{ form_row(form.askDescription) }}
+        <button type="submit" class="btn btn-outline-success">Enregistrer</button>
+        {{ form_end(form) }}
+    {% else %}
+        <div class="alert alert-danger" role="alert">
+            Une error c'est produite veuillez contacter le service informatique à l'adresse : <strong>Info-support@vvf.com</strong>
         </div>
-    </div>
-    {{ form_row(form.askDescription) }}
-    <button type="submit" class="btn btn-outline-success">Enregistrer</button>
-    {{ form_end(form) }}
+         <p><a href="{{ path('app_aske')}}" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Voulez-vous refaire une demande</a></p>
+    {% endif %}    
 {% endblock %}

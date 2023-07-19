@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demande Enregister{% endblock %}
+
+{% block body %}
+    <div class="alert alert-success" role="alert">
+         Votre demande a bien été enregistré et un mail de notification a été envoyé au  traiteur des demandes  
+    </div>
+    <p><a href="{{ path('app_aske')}}" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Voulez-vous refaire une demande</a></p>
+{% endblock %}
