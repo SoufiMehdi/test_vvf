@@ -35,6 +35,8 @@ class Asked
     #[ORM\ManyToOne(inversedBy: 'apAskeds')]
     private ?Applicant $askApplicant = null;
 
+    private string $askEmailApplicant;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -111,4 +113,17 @@ class Asked
 
         return $this;
     }
+
+    public function getAskEmailApplicant(): string 
+    {
+        return $this->askEmailApplicant;
+    }
+
+    public function setAskEmailApplicant(string $askEmailApplicant): static
+    {
+        $this->askEmailApplicant = $askEmailApplicant;
+
+        return $this;
+    }
+    
 }
