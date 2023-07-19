@@ -16,10 +16,10 @@ class AskedType extends AbstractType
     {
         $builder
             ->add('askSubject', TextType::class, [
-                'label' => 'Suject de la demande'
+                'label' => 'Sujet de la demande'
             ])
             ->add('askDescription', TextareaType::class, [
-                'label' => 'Corp de la demande'
+                'label' => 'Corps de la demande'
             ])
             ->add('askEmailApplicant', EmailType::class, [
                 'label' => 'Email du demandeur'
